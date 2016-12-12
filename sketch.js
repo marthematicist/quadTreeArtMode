@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.38 artMode';
+	versionNumber = '0.39 artMode';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -21,7 +21,7 @@ function setupGlobalVariables() {
 		startWaitTime = 4000;
 		clearFirstTime = true;
 		modeChangeTimer = millis();
-		modeChangeDisplayTime = 2000;
+		modeChangeDisplayTime = 4000;
 		
 	}
 	
@@ -674,15 +674,15 @@ function setup() {
 	fill(255);
 	text("N-BODY QUADTREE\n-marthematicist-" , 0.5*xRes , 0.3*yRes - 80 );
 	textSize( 25 );
-	text( "A particle physics simulation\nutilizing the Barnes-Hut algorithm." , 0.5*xRes , 0.3*yRes + 70 );
+	//text( "A particle physics simulation\nutilizing the Barnes-Hut algorithm." , 0.5*xRes , 0.3*yRes + 70 );
 	textSize( 40 );
 	text( "[Double-click(tap) to reverse physics]" , 0.5*xRes , 0.3*yRes + 190 );
 	textSize( 30 );
 	text( "version " + versionNumber , 0.5*xRes , yRes - 100 );
 	textSize( 20 );
-	text( "N=" + numBodies + "   field dimensions=" + round(xExt*100)*0.01 + "x" + round(yExt*100)*0.01 + 
-		  "   avgMass=" + round(overallMass/numBodies*100)*0.01  + "\nG=" + universalConstant + "   epsilon=" + epsilon + "   theta=" + theta + 
-		  "   dt=" + dt   , 0.5*xRes , yRes - 60 );
+	//text( "N=" + numBodies + "   field dimensions=" + round(xExt*100)*0.01 + "x" + round(yExt*100)*0.01 + 
+	//	  "   avgMass=" + round(overallMass/numBodies*100)*0.01  + "\nG=" + universalConstant + "   epsilon=" + epsilon + "   theta=" + theta + 
+	//	  "   dt=" + dt   , 0.5*xRes , yRes - 60 );
 	
 	startTimer = millis();
 }
@@ -738,15 +738,15 @@ function draw() {
 		noStroke();
 		textAlign( CENTER );
 		textSize( 30 );
-		var textWidth = 390;
-		var textHeight = 40;
-		rect( 0.5*xRes - 0.5*textWidth , yRes - 60 , textWidth , textHeight , 10 );
+		var textWidth = 450;
+		var textHeight = 80;
+		rect( 0.5*xRes - 0.5*textWidth , yRes - 90 , textWidth , textHeight , 10 );
 		fill( 255 , 255 , 255 , 128 );
-		if( millis() - modeChangeTimer < modeChangeDisplayTime*0.9 ) {
+		if( millis() - modeChangeTimer < modeChangeDisplayTime*0.95 ) {
 			if( !reversePhysics ) {
-				text( "physics mode: ATTRACT" , 0.5*xRes , yRes - 30 );
+				text( "physics mode: ATTRACT\n[double-click/tap to change]" , 0.5*xRes , yRes - 60 );
 			} else {
-				text( "physics mode: REPEL" , 0.5*xRes , yRes - 30 );
+				text( "physics mode: REPEL\n[double-click/tap to change]" , 0.5*xRes , yRes - 60 );
 			}
 		}
 	}
