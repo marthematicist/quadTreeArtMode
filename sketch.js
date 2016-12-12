@@ -84,10 +84,10 @@ function setupGlobalVariables() {
 		drawTreeDiv = true;
 		drawCOM = true;
 		comDrawThreshold = 2*avgMass;
-		divColor = color( 128 , 128 , 128 , 128 );
+		divColor = color( 100 , 100 , 100 , 32 );
 		treeFillColor = color( 128 , 128 , 128 , 64 );
 		comColor = color( 255 , 255 , 0 , 1 );
-		divWeight = 0.5
+		divWeight = 1;
 		// body draw variables
 		drawBodies = false;
 		bodyDiam = minRes*0.006;
@@ -421,6 +421,7 @@ var QuadTree = function( center , halfDimX , halfDimY ) {
 			var c = sim2WinVect( this.center );
 			var hdx = sim2Win( this.halfDimX );
 			var hdy = sim2Win( this.halfDimY );
+			stroke( divColor );
 			line( c.x - hdx , c.y , c.x + hdx , c.y );
 			line( c.x , c.y - hdy , c.x , c.y + hdy );
 			this.children[0].drawDiv();
@@ -744,9 +745,9 @@ function draw() {
 		fill( 255 , 255 , 255 , 128 );
 		if( millis() - modeChangeTimer < modeChangeDisplayTime*0.95 ) {
 			if( !reversePhysics ) {
-				text( "physics mode: ATTRACT\n[double-click/tap to change]" , 0.5*xRes , yRes - 60 );
+				text( "physics mode: ATTRACT\n[double-click/tap to reverse]" , 0.5*xRes , yRes - 60 );
 			} else {
-				text( "physics mode: REPEL\n[double-click/tap to change]" , 0.5*xRes , yRes - 60 );
+				text( "physics mode: REPEL\n[double-click/tap to reverse]" , 0.5*xRes , yRes - 60 );
 			}
 		}
 	}
