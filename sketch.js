@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.38';
+	versionNumber = '0.38 artMode';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -89,7 +89,7 @@ function setupGlobalVariables() {
 		comColor = color( 255 , 255 , 0 , 1 );
 		divWeight = 0.5
 		// body draw variables
-		drawBodies = true;
+		drawBodies = false;
 		bodyDiam = minRes*0.006;
 		bodyAlpha = 128;
 		bodyColor = color( 255 , 255 , 255 , bodyAlpha );
