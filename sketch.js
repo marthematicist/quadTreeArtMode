@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.39 artMode';
+	versionNumber = '0.41';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -28,7 +28,7 @@ function setupGlobalVariables() {
 	// SIMULATION VARIABLES
 	{
 		// number of bodies
-		numBodies = 64;
+		numBodies = 50;
 		// simulation area
 		simArea = 100;
 		// linear conversion factor: sim to window
@@ -55,7 +55,7 @@ function setupGlobalVariables() {
 		// probability of negative particle
 		negProb = 0.0;
 		// PHYSICS CONSTANTS
-		reversePhysics = false;
+		reversePhysics = true;
 		dt = 1.0 / ( 400 );
 		// Edge velocity dampening
 		edgeSpringConstant = 1;
@@ -77,20 +77,23 @@ function setupGlobalVariables() {
 	
 	// DRAW VARIABLES
 	{
+		// artMode - bodies not displayed
+		artMode = true;
 		// general draw variables
 		bgColor = color( 0 , 0 , 0 , 10  );
 		// tree draw variables
 		drawTreeFill = true;
 		drawTreeDiv = true;
 		drawCOM = true;
-		comFactor = 2;
-		comDrawThreshold = 1.7*avgMass;
+		comDrawThreshold = 4*avgMass;
+		comSizeFactor = 2;
 		divColor = color( 100 , 100 , 100 , 32 );
 		treeFillColor = color( 128 , 128 , 128 , 64 );
 		comColor = color( 255 , 255 , 0 , 1 );
 		divWeight = 1;
 		// body draw variables
-		drawBodies = false;
+		if( artMode ) {	drawBodies = false; }
+		else { drawBodies = true; }
 		bodyDiam = minRes*0.006;
 		bodyAlpha = 128;
 		bodyColor = color( 255 , 255 , 255 , bodyAlpha );
@@ -118,16 +121,16 @@ function sim2Win( a ) {
 	return a*sim2WinFactor;
 };
 function sim2WinVect( a ) {
-	return createVector( (a.x - xMin)*sim2WinFactor ,
+	return createVector( (a.x - xMin)*sim2WinFactor , 
 						 (a.y - yMin)*sim2WinFactor );
 };
 
 // CLASS Body
 var Body = function() {
 	// x = position (randomized)
-	this.x = createVector( random( xMin , xMax ) , random( yMin , yMax ) );
-	// this.x = p5.Vector.random2D();
-	// this.x.mult( random( 0.3*minExt , 0.3*minExt ) );
+	// this.x = createVector( random( xMin , xMax ) , random( yMin , yMax ) );
+	this.x = p5.Vector.random2D();
+	this.x.mult( random( 0 , 0.3*minExt ) );
 	// v = velocity
 	this.v = createVector( 0 , 0 );
 	// a = acceleration
@@ -258,7 +261,7 @@ var QuadTree = function( center , halfDimX , halfDimY ) {
 					this.children[ this.whichChild( this.body ) ].addBody( this.body );
 					this.children[ this.whichChild( b ) ].addBody( b );
 					this.hasBody = false;
-				}
+				} 
 				// if at max depth
 				else {
 					// combine the bodies by setting the mass of one to 0
@@ -278,7 +281,7 @@ var QuadTree = function( center , halfDimX , halfDimY ) {
 					// new color
 					a.c = lerpColor( b.c , this.body.c , b.m / ( b.m + this.body.m ) );
 					// new charge
-					if( b.m > this.body.m ) { a.p = b.p; }
+					if( b.m > this.body.m ) { a.p = b.p; } 
 					else { a.p = this.body.p; }
 					// set this.body to new body
 					this.body.x = createVector( a.x.x , a.x.y );
@@ -404,7 +407,7 @@ var QuadTree = function( center , halfDimX , halfDimY ) {
 			var x = sim2WinVect( this.com );
 			//if( this.totalMass < overallMass*1.1 ) {
 			if( true ) {
-				var d = sqrt( sim2Win( this.totalMass ) )*comFactor;
+				var d = comSizeFactor*sqrt( sim2Win( this.totalMass ) );
 				ellipse( x.x , x.y , d , d );
 			}
 			comDrawn++;
@@ -595,7 +598,7 @@ var BodySim = function( num ) {
 		}
 	};
 	
-	// method to evolve the simulation 1/2 step
+	// method to evolve the simulation 1/2 step 
 	this.evolveHalfStep = function() {
 		
 		this.zeroAccelerations();
@@ -604,7 +607,7 @@ var BodySim = function( num ) {
 		this.removeZeroMasses;
 		if( bruteMethod ) {
 			this.applyMutualForcesBrute();
-		} else {
+		} else {			
 			this.applyMutualForcesTree();
 		}
 		this.applyEdgeForces();
@@ -626,7 +629,7 @@ var BodySim = function( num ) {
 			this.removeZeroMasses;
 			if( bruteMethod ) {
 				this.applyMutualForcesBrute();
-			} else {
+			} else {			
 				this.applyMutualForcesTree();
 			}
 			this.applyEdgeForces();
@@ -677,16 +680,21 @@ function setup() {
 	fill(255);
 	text("N-BODY QUADTREE\n-marthematicist-" , 0.5*xRes , 0.3*yRes - 80 );
 	textSize( 25 );
-	//text( "A particle physics simulation\nutilizing the Barnes-Hut algorithm." , 0.5*xRes , 0.3*yRes + 70 );
+	if( !artMode ) {
+		text( "A particle physics simulation\nutilizing the Barnes-Hut algorithm." , 0.5*xRes , 0.3*yRes + 70 );
+	}
 	textSize( 40 );
 	text( "[Double-click(tap) to reverse physics]" , 0.5*xRes , 0.3*yRes + 190 );
 	textSize( 30 );
 	text( "version " + versionNumber , 0.5*xRes , yRes - 100 );
 	textSize( 20 );
-	//text( "N=" + numBodies + "   field dimensions=" + round(xExt*100)*0.01 + "x" + round(yExt*100)*0.01 +
-	//	  "   avgMass=" + round(overallMass/numBodies*100)*0.01  + "\nG=" + universalConstant + "   epsilon=" + epsilon + "   theta=" + theta +
-	//	  "   dt=" + dt   , 0.5*xRes , yRes - 60 );
-	
+	if( artMode ) {
+		text( "artMode" , 0.5*xRes , yRes - 60 );
+	} else {
+		text( "N=" + numBodies + "   field dimensions=" + round(xExt*100)*0.01 + "x" + round(yExt*100)*0.01 + 
+			  "   avgMass=" + round(overallMass/numBodies*100)*0.01  + "\nG=" + universalConstant + "   epsilon=" + epsilon + "   theta=" + theta + 
+			  "   dt=" + dt   , 0.5*xRes , yRes - 60 );
+	}
 	startTimer = millis();
 }
 
@@ -714,7 +722,7 @@ function draw() {
 		S.B[0].v = createVector( 0 , 0 );
 		S.B[0].a = createVector( 0 , 0 );
 		S.B[0].m = 50*maxMass;
-		S.B[0].x = createVector( xMin + win2SimFactor*mouseX ,
+		S.B[0].x = createVector( xMin + win2SimFactor*mouseX , 
 								 yMin + win2SimFactor*mouseY );
 		S.B[0].p = -1;
 	}
@@ -724,7 +732,7 @@ function draw() {
 	S.evolveFullStep(1);
 	
 	// draw centers of mass
-	if( drawCOM ) {
+	if( drawCOM ) { 
 		comDrawn = 0;
 		S.T.drawCentersOfMass(); }
 	
@@ -757,9 +765,9 @@ function draw() {
 	avgFrameTime = avgFrameTime*0.8 + (millis() - frameTimer)*0.2;
 	if( frameCount%20 === 0 ) {
 		console.log( "theta:" + theta +
-					 "   direct calc:" + directCalcCount +
-					 "   treeCalc:" +  treeCalcCount +
-					 "   totalCalc:" + (directCalcCount+treeCalcCount) +
+					 "   direct calc:" + directCalcCount + 
+					 "   treeCalc:" +  treeCalcCount + 
+					 "   totalCalc:" + (directCalcCount+treeCalcCount) + 
 					 "   bodiesRemoved:" + bodiesRemoved +
 					 "   avgFrameTime:" + avgFrameTime +
 					 "   comDrawn=" + comDrawn);
@@ -774,3 +782,6 @@ function mousePressed() {
 	}
 	clickTimer = millis();
 }
+
+
+
