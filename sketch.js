@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.44';
+	versionNumber = '0.46';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -131,7 +131,7 @@ var Body = function() {
 	// x = position (randomized)
 	// this.x = createVector( random( xMin , xMax ) , random( yMin , yMax ) );
 	this.x = p5.Vector.random2D();
-	this.x.mult( random( 0 , 0.02*minExt ) );
+	this.x.mult( random( 0 , 0.1*minExt ) );
 	// v = velocity
 	this.v = createVector( 0 , 0 );
 	// a = acceleration
