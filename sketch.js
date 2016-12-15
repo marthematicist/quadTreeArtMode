@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.41';
+	versionNumber = '0.43';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -48,7 +48,7 @@ function setupGlobalVariables() {
 		simCenter = createVector( 0.5*( xMin + xMax ) , 0.5*( yMin + yMax ) );
 		// body mass variables
 		totalMass = 400;
-		massDev = 0.5;
+		massDev = 0.0;
 		avgMass = totalMass/numBodies;
 		minMass = (1-massDev)*avgMass;
 		maxMass = (1+massDev)*avgMass;
@@ -125,12 +125,13 @@ function sim2WinVect( a ) {
 						 (a.y - yMin)*sim2WinFactor );
 };
 
+
 // CLASS Body
 var Body = function() {
 	// x = position (randomized)
 	// this.x = createVector( random( xMin , xMax ) , random( yMin , yMax ) );
 	this.x = p5.Vector.random2D();
-	this.x.mult( random( 0 , 0.3*minExt ) );
+	this.x.mult( random( 0 , 0.02*minExt ) );
 	// v = velocity
 	this.v = createVector( 0 , 0 );
 	// a = acceleration
