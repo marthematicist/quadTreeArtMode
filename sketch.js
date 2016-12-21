@@ -66,7 +66,7 @@ function setupGlobalVariables() {
 		minMass = (1-massDev)*avgMass;
 		maxMass = (1+massDev)*avgMass;
 		// PHYSICS CONSTANTS
-		reversePhysics = false;
+		reversePhysics = true;
 		// simulation time per frame
 		dt = 1.0 / ( 400 );
 		// Edge velocity dampening
