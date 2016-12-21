@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.64';
+	versionNumber = '0.68';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -97,13 +97,15 @@ function setupGlobalVariables() {
 		drawTreeFill = true;
 		drawTreeDiv = true;
 		drawCOM = false;
+		// size factor for drawing divisions
+		divSizeFactor = 0.99;
 		// threshold for deciding whther to draw center-of-mass
 		comDrawThreshold = 3.5*avgMass;
 		comSizeFactor = 1;
 		// color of tree divisions
 		divColor = color( 192 , 192 , 192 , 64 );
 		// thickness of divisions
-		divWeight = 1;
+		divWeight = minRes*0.001;
 		// center of mass color
 		comColor = color( 196 , 196 , 0 , 1 );
 		// body draw variables
@@ -116,7 +118,7 @@ function setupGlobalVariables() {
 		// body color
 		bodyColor = color( 255 , 255 , 255 , bodyAlpha );
 		// tree fill transparency
-		fillAlpha = 6;
+		fillAlpha = 8;
 		// tree fill color (base from which body colors are randomized)
 		baseFillColor = color( 0 , 196 , 255 , fillAlpha );
 		// amount of randomization from base tree fill color
@@ -483,7 +485,7 @@ var QuadTree = function( center , halfDimX , halfDimY ) {
 			var c = sim2WinVect( this.center );
 			var hdx = sim2Win( this.halfDimX );
 			var hdy = sim2Win( this.halfDimY );
-			rect( c.x - hdx , c.y - hdy , 2*hdx , 2*hdy );
+			rect( c.x - hdx*divSizeFactor , c.y - hdy*divSizeFactor , 2*hdx*divSizeFactor , 2*hdy*divSizeFactor );
 		}
 		if( this.hasChildren ) {
 			this.children[0].fillChildren();
