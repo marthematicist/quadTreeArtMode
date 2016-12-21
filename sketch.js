@@ -1,7 +1,7 @@
 function setupGlobalVariables() {
 	
 	// version number
-	versionNumber = '0.63';
+	versionNumber = '0.64';
 	// CANVAS VARIABLES
 	{
 		// set canvas size to fill the window
@@ -38,7 +38,7 @@ function setupGlobalVariables() {
 	// SIMULATION VARIABLES
 	{
 		// number of bodies
-		numBodies = 64;
+		numBodies = 200;
 		// initial conditions
 		initCond = 3;
 		// simulation area
@@ -73,7 +73,7 @@ function setupGlobalVariables() {
 		edgeNormalDamping = 0.05;
 		// Friction coefficients
 		frictionConstantAttract = 0.001;
-		frictionConstantRepel = 0.2;
+		frictionConstantRepel = 0.02;
 		// Gravity constant
 		universalConstant = 1;
 		// gravity smoothing factor (0.4 optimum)
